@@ -3,6 +3,7 @@
 #define ERROR_THRESHOLD 100
 
 int error_counter;
+int error_test;
 
 float recent_Dg_X;
 float recent_Dg_Y;
@@ -38,4 +39,11 @@ void err_check(const Fog_Transmit_t* transmit)
 	}
 	if(error_counter == ERROR_THRESHOLD)
 		alarm();
+}
+
+void err_test(const Fog_Transmit_t* transmit)
+{
+	if (transmit->Dg_X == recent_Dg_X)
+			//transmit->Acc_X == recent_Acc_X || transmit->Acc_Y == recent_Acc_Y || transmit->Acc_Z == recent_Acc_Z)
+		error_test++;
 }

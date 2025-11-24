@@ -9,6 +9,7 @@ extern "C" {
 #include "fog.h"
 
 void err_check(const Fog_Transmit_t* transmit);
+void err_test(const Fog_Transmit_t* transmit);
 
 #ifdef __cplusplus
 }

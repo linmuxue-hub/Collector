@@ -153,27 +153,27 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>i2c_temperature</ItemText>
+          <ItemText>m</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>adc_temperature</ItemText>
+          <ItemText>i2c_temperature</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>IXZ_F50X_X</ItemText>
+          <ItemText>AcqBoard_Config</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>error_counter</ItemText>
+          <ItemText>adc_temperature</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
-          <ItemText>AcqBoard_Config</ItemText>
+          <ItemText>ADCData</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>

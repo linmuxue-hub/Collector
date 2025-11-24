@@ -131,7 +131,6 @@ int main(void)
 
   /* timebase config. */
   wk_timebase_init();
-	wk_delay_ms(3000);
 	
   /* init gpio function. */
   wk_gpio_config();

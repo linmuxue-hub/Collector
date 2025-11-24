@@ -43,7 +43,7 @@
 
 /* private typedef -----------------------------------------------------------*/
 /* add user code begin private typedef */
-
+int m;
 /* add user code end private typedef */
 
 /* private define ------------------------------------------------------------*/
@@ -246,6 +246,7 @@ void TMR2_GLOBAL_IRQHandler(void)
 	if(tmr_interrupt_flag_get(TMR2, TMR_OVF_FLAG) != RESET)
   {
 		gpio_bits_set(GPIOA, GPIO_PINS_9);
+		gpio_bits_reset(GPIOA, GPIO_PINS_9);
 		tmr_counter_enable(TMR3, TRUE);
 		tmr_flag_clear(TMR2, TMR_OVF_FLAG);
   }
@@ -272,12 +273,17 @@ void TMR3_GLOBAL_IRQHandler(void)
   /* add user code begin TMR3_GLOBAL_IRQ 0 */
 	if(tmr_interrupt_flag_get(TMR3, TMR_OVF_FLAG) != RESET)
   {
-		gpio_bits_reset(GPIOA, GPIO_PINS_9);
 		tmr_counter_enable(TMR3, FALSE);
 		encode_fog_transmit_t(&Fog_Transmit,IXZ_F50X_X,IXZ_F50X_Y,IXZ_F50X_Z,ADCData);
+//		err_test(&Fog_Transmit);
 		err_check(&Fog_Transmit);
 		dma_channel_enable(DMA1_CHANNEL7, TRUE);
-		adc_ordinary_software_trigger_enable(ADC1, TRUE);
+		if(wk_adc_counter != 4)
+			wk_adc_counter++;
+		else{
+			adc_ordinary_software_trigger_enable(ADC1, TRUE);
+			wk_adc_counter = 0;
+		}
 		dma_channel_enable(DMA1_CHANNEL2, TRUE);
     dma_channel_enable(DMA1_CHANNEL4, TRUE);
     dma_channel_enable(DMA1_CHANNEL6, TRUE);
@@ -380,6 +386,7 @@ void EXINT15_10_IRQHandler(void)
   /* add user code begin EXINT15_10_IRQ 0 */
 	if(exint_interrupt_flag_get(EXINT_LINE_12) != RESET)
   {
+		m++;
 		adc_counter = 0;
 		gpio_bits_reset(CS_AX_GPIO_PORT, CS_AX_PIN);
 		dma_channel_enable(DMA2_CHANNEL1, TRUE);
@@ -630,7 +637,6 @@ void DMA2_Channel1_IRQHandler(void)
 	if(dma_interrupt_flag_get(DMA2_FDT1_FLAG) != RESET)
   {
     spi_enable(SPI2, FALSE);
-	
     dma_channel_enable(DMA2_CHANNEL1, FALSE); 
     dma_data_number_set(DMA2_CHANNEL1, DMA2_CHANNEL1_BUFFER_SIZE);
 		switch(adc_counter){
@@ -678,7 +684,6 @@ void DMA2_Channel3_IRQHandler(void)
 	i2c_temperature_temp = (i2c_rx_buf[0] << 8)| i2c_rx_buf[1];
 	i2c_temperature = decode_tmp117(i2c_temperature_temp);
 }
-
 
 /**
   * @brief  this function handles DMA2 Channel 4 handler.
@@ -744,6 +749,10 @@ void DMA2_Channel7_IRQHandler(void)
 	if(dma_interrupt_flag_get(DMA2_FDT7_FLAG) != RESET)
  	 {
 		decode_acqboard_config_t(pid_transmit_receive, DMA2_CHANNEL7_BUFFER_SIZE);
+		AcqBoard_Config.target_temp = 40.0f;
+		AcqBoard_Config.Kp = 0.28f;
+		AcqBoard_Config.Ki = 0.009f;
+		AcqBoard_Config.Kd = 0.01f;
 		if(AcqBoard_Config.GC == 0)
 			gpio_bits_reset(GC_GPIO_PORT, GC_PIN);
 		else

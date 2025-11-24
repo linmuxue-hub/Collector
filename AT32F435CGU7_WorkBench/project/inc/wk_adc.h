@@ -64,6 +64,7 @@ extern "C" {
   void wk_adc1_init(void);
 
 /* add user code begin exported functions */
+	extern int wk_adc_counter;
 	extern float adc_temperature;
 	extern float adc_temperature_temp;
 /* add user code end exported functions */

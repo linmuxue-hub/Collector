@@ -21,9 +21,9 @@ output_u	---	DAC输出的真实电压，PID计算电压加上温度控制器静�
 */
 float delta_u,output_u;
 
-float Kp_Max = 1.5f;
-float Ki_Max = 0.5f;
-float Kd_Max = 0.5f;
+float Kp_Max = 1.0f;
+float Ki_Max = 0.3f;
+float Kd_Max = 0.1f;
 float Kp_iTerm;
 float Ki_iTerm;
 float Kd_iTerm;
@@ -101,7 +101,7 @@ uint16_t pid_calculate(float temperature)
 	if(AcqBoard_Config.Ki)
 	{
 		if(e < 5) 
-			e_sum += e * 0.001f;
+			e_sum += e * 0.005f;
 		Ki_iTerm = AcqBoard_Config.Ki * e_sum;
 		if(fabs(Ki_iTerm) > Ki_Max)
 		{
@@ -114,12 +114,12 @@ uint16_t pid_calculate(float temperature)
 	if(AcqBoard_Config.Kd)
 	{
 		e = -temperature;
-		Kd_iTerm = LIMIT(AcqBoard_Config.Kd * (e - e_last) * 1000, -Kd_Max, Kd_Max);
+		Kd_iTerm = LIMIT(AcqBoard_Config.Kd * (e - e_last), -Kd_Max, Kd_Max);
 		e_last += fParam * (e - e_last);
 	}else
 		Kd_iTerm = 0.0f;
 	
 	delta_u =  Kp_iTerm + Ki_iTerm + Kd_iTerm;
-	output_u = LIMIT(delta_u + 1.5f, 0, 3.3f);
+	output_u = LIMIT(delta_u + 1.5f, 0.5f, 2.5f);
 	return (uint16_t)((output_u / 3.3f) * 4095.0f);
 }

@@ -28,6 +28,7 @@
 #include "wk_adc.h"
 
 /* add user code begin 0 */
+int wk_adc_counter = 0;
 float adc_temperature;
 float adc_temperature_temp;
 /* add user code end 0 */
@@ -54,7 +55,7 @@ void wk_adc_common_init(void)
   /* adc_common_settings------------------------------------------------------------ */
   adc_common_default_para_init(&adc_common_struct);
   adc_common_struct.combine_mode = ADC_INDEPENDENT_MODE;
-  adc_common_struct.div = ADC_HCLK_DIV_8;
+  adc_common_struct.div = ADC_HCLK_DIV_16;
   adc_common_struct.common_dma_mode = ADC_COMMON_DMAMODE_DISABLE;
   adc_common_struct.common_dma_request_repeat_state = FALSE;
   adc_common_struct.sampling_interval = ADC_SAMPLING_INTERVAL_5CYCLES;
@@ -104,7 +105,7 @@ void wk_adc1_init(void)
   adc_resolution_set(ADC1, ADC_RESOLUTION_12B);
 
   /* adc_ordinary_conversionmode---------------------------------------------------- */
-  adc_ordinary_channel_set(ADC1, ADC_CHANNEL_8, 1, ADC_SAMPLETIME_12_5);
+  adc_ordinary_channel_set(ADC1, ADC_CHANNEL_8, 1, ADC_SAMPLETIME_640_5);
 
   adc_ordinary_conversion_trigger_set(ADC1, ADC_ORDINARY_TRIG_TMR1CH1, ADC_ORDINARY_TRIG_EDGE_NONE);
 
